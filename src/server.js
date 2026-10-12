@@ -13,6 +13,11 @@ app.get('/project', (req, res) => {
     res.send('I am building a URL shortener!');
 });
 
+app.get('/about/:name', (req, res) => {
+    console.log(req.method, req.url);
+    res.send(`${req.params.name} is learning backend development!`);
+});
+
 app.listen(3000, () => {
     console.log('Server running at http://localhost:3000');
 });
