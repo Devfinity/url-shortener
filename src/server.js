@@ -1,8 +1,7 @@
 const express = require('express');
 const app = express();
 
-
-
+app.use(express.static('public')); //uses the directory public which i created
 app.use(express.json()); //this is middlewore which allows user and server interaction
 
 const links = {
@@ -20,7 +19,11 @@ app.post('/shorten', (req, res) => {
     links[codeGen] = req.body.url;
     console.log(links[codeGen]);
 
-    res.redirect('http://localhost:3000/' + codeGen);
+    const backtofront = {
+        "shortUrl": 'http://localhost:3000/' + codeGen
+    }
+
+    res.json(backtofront);
 });
 
 app.get('/', (req, res) => {
