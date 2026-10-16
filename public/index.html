@@ -17,13 +17,16 @@
 
     <div id="enterURL">
         <p> Enter your URL: </p>
-        <form id="formUrl">
+        <form id="formUrl" novalidate>
             <input id="urlHere" type="url" placeholder="https://example.com"> <br> <br>
             <button type="submit" id="submittingTheUrl"> Shorten the URL! </button> <br> <br>
 
             <output id="takeTheShortenedUrl"></output>
+            <button id="copyingTheUrl" type="button"> Copy! </button>
         </form>
     </div>
+
+    <div id="statusMessage"></div>
 </body>
 
 </html>

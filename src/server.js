@@ -9,18 +9,31 @@ const links = {
     Void22: 'http://localhost:3000/about/Void'
 };
 
-console.log(links['Void22']);
-
 app.post('/shorten', (req, res) => {
+    if (!req.body.url) { //returns a error when field is empty
+        return res.status(400).json({ //json sends this to the script.js
+            message: 'Please provide a URL.'
+        });
+    }
+
+    try {
+        new URL(req.body.url) //valdating the url ourself
+
+    }
+    catch {
+        return res.status(400).json({
+            message: 'Please provide a valid URL.'
+        });
+    }
+
     const codeGen = Math.random().toString(36).substring(2, 8);
 
     console.log(codeGen);
 
-    links[codeGen] = req.body.url;
-    console.log(links[codeGen]);
+    links[codeGen] = req.body.url; //original url
 
     const backtofront = {
-        "shortUrl": 'http://localhost:3000/' + codeGen
+        "shortUrl": 'http://localhost:3000/' + codeGen //new url
     }
 
     res.json(backtofront);
