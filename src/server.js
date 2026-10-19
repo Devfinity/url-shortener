@@ -1,4 +1,5 @@
 const express = require('express');
+const db = require('./database.js');
 const app = express();
 
 app.use(express.static('public')); //uses the directory public which i created
@@ -30,7 +31,8 @@ app.post('/shorten', (req, res) => {
 
     console.log(codeGen);
 
-    links[codeGen] = req.body.url; //original url
+    db.prepare('INSERT INTO urls(code, original_url) VALUES(?, ?)').run(codeGen, req.body.url); //puts js value into the 
+    //database to store code and url
 
     const backtofront = {
         "shortUrl": 'http://localhost:3000/' + codeGen //new url
@@ -56,10 +58,10 @@ app.get('/about/:name', (req, res) => {
 });
 
 app.get('/:code', (req, res) => {
-    const thisisworking = links[req.params.code];
+    const thisisworking = db.prepare('SELECT original_url FROM urls WHERE code = ?').get(req.params.code); //retrives the url from the database
 
     if (thisisworking) {
-        res.redirect(thisisworking);
+        res.redirect(thisisworking.original_url);
     }
     else {
         res.status(404).send('Short link not found');
