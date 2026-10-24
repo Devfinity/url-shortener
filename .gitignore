@@ -1,4 +1,5 @@
 node_modules/  
+urls.db
 .env
 data/*.db
 data/*.db-*
