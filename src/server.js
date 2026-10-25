@@ -5,6 +5,8 @@ const app = express();
 app.use(express.static('public')); //uses the directory public which i created
 app.use(express.json()); //this is middlewore which allows user and server interaction
 
+let codeGen;
+
 const links = {
     Anant1: 'http://localhost:3000/about/Anantshree',
     Void22: 'http://localhost:3000/about/Void'
@@ -27,12 +29,26 @@ app.post('/shorten', (req, res) => {
         });
     }
 
-    const codeGen = Math.random().toString(36).substring(2, 8);
+    let inserted = false;
 
-    console.log(codeGen);
+    while (!inserted) {
+        try {
+            codeGen = Math.random().toString(36).substring(2, 8);
 
-    db.prepare('INSERT INTO urls(code, original_url) VALUES(?, ?)').run(codeGen, req.body.url); //puts js value into the 
-    //database to store code and url
+
+            db.prepare('INSERT INTO urls(code, original_url) VALUES(?, ?)').run(codeGen, req.body.url); //puts js value into the
+            //database to store code and ur
+            inserted = true;
+        }
+        catch (error) {
+            if (error.code == 'SQLITE_CONSTRAINT_PRIMARYKEY') {
+                inserted = false;
+            }
+            else {
+                return; //we will work on it
+            }
+        }
+    }
 
     const backtofront = {
         "shortUrl": 'http://localhost:3000/' + codeGen //new url
