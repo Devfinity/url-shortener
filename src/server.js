@@ -20,7 +20,19 @@ app.post('/shorten', (req, res) => {
     }
 
     try {
-        new URL(req.body.url) //valdating the url ourself
+        const parasedUrl = new URL(req.body.url) //valdating the url ourself
+
+        if (parasedUrl.protocol != 'https:' && parasedUrl.protocol != 'http:') {
+            return res.status(400).json({
+                message: 'Please use url with http: and https: protocol!'
+            });
+        }
+
+        if (parasedUrl.hostname == 'localhost' && parasedUrl.port == '3000') {
+            return res.status(400).json({
+                message: 'You cannot shorten a URL that points to this application.'
+            });
+        }
 
     }
     catch {
