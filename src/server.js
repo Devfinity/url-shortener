@@ -89,6 +89,9 @@ app.get('/:code', (req, res) => {
     const thisisworking = db.prepare('SELECT original_url FROM urls WHERE code = ?').get(req.params.code); //retrives the url from the database
 
     if (thisisworking) {
+        //counts the number of times someone has clicked the shortened link and saves to database
+        //doesn't count unique!!
+        db.prepare('UPDATE urls SET clicks = clicks + 1 WHERE code = ?').run(req.params.code);
         res.redirect(thisisworking.original_url);
     }
     else {

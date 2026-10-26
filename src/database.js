@@ -5,7 +5,8 @@ const db = new Database('urls.db');
 db.exec(`
     CREATE TABLE IF NOT EXISTS urls (
         code TEXT PRIMARY KEY,
-        original_url TEXT NOT NULL
+        original_url TEXT NOT NULL,
+        clicks INTEGER DEFAULT 0
     );
 `);
 
