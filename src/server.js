@@ -5,8 +5,6 @@ const app = express();
 app.use(express.static('public')); //uses the directory public which i created
 app.use(express.json()); //this is middlewore which allows user and server interaction
 
-let codeGen;
-
 const links = {
     Anant1: 'http://localhost:3000/about/Anantshree',
     Void22: 'http://localhost:3000/about/Void'
@@ -40,10 +38,11 @@ app.post('/shorten', (req, res) => {
             message: 'Please provide a valid URL.'
         });
     }
-
+    let codeGen;
+    let maxAttempt = 0;
     let inserted = false;
 
-    while (!inserted) {
+    while (!inserted && maxAttempt < 10) {
         try {
             codeGen = Math.random().toString(36).substring(2, 8);
 
@@ -55,11 +54,18 @@ app.post('/shorten', (req, res) => {
         catch (error) {
             if (error.code == 'SQLITE_CONSTRAINT_PRIMARYKEY') {
                 inserted = false;
+                maxAttempt++;
             }
             else {
                 return; //we will work on it
             }
         }
+    }
+
+    if (!inserted) {
+        return res.status(500).json({
+            message: 'Failed to generate a unique code, Please try again!'
+        });
     }
 
     const backtofront = {
