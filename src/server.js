@@ -91,6 +91,20 @@ app.get('/about/:name', (req, res) => {
     res.send(`${req.params.name} is learning backend development!`);
 });
 
+app.get('/stats/:code', (req, res) => {
+    const stats = db.prepare('SELECT code, original_url, clicks FROM urls WHERE code = ?').get(req.params.code); //retrives values
+    //it is working like a struct if we compare it to c++
+
+    if (stats === undefined) {
+        return res.status(404).json({
+            message: 'Code not found, please enter a valid code!'
+        });
+    }
+    else {
+        res.json(stats);
+    }
+});
+
 app.get('/:code', (req, res) => {
     const thisisworking = db.prepare('SELECT original_url FROM urls WHERE code = ?').get(req.params.code); //retrives the url from the database
 
