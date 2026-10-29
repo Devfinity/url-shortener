@@ -47,7 +47,7 @@ app.post('/shorten', (req, res) => {
             codeGen = Math.random().toString(36).substring(2, 8);
 
 
-            db.prepare('INSERT INTO urls(code, original_url) VALUES(?, ?)').run(codeGen, req.body.url); //puts js value into the
+            db.prepare('INSERT INTO urls(code, original_url, created_at) VALUES(?, ?, CURRENT_TIMESTAMP)').run(codeGen, req.body.url); //puts js value into the
             //database to store code and ur
             inserted = true;
         }
@@ -95,7 +95,7 @@ app.get('/about/:name', (req, res) => {
 
 app.get('/stats/:code', (req, res) => {
     try {
-        const stats = db.prepare('SELECT code, original_url, clicks FROM urls WHERE code = ?').get(req.params.code); //retrives values
+        const stats = db.prepare('SELECT code, original_url, clicks, created_at FROM urls WHERE code = ?').get(req.params.code); //retrives values
         //it is working like a struct if we compare it to c++
 
         if (stats === undefined) {

@@ -6,7 +6,8 @@ db.exec(`
     CREATE TABLE IF NOT EXISTS urls (
         code TEXT PRIMARY KEY,
         original_url TEXT NOT NULL,
-        clicks INTEGER DEFAULT 0
+        clicks INTEGER DEFAULT 0,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
 `);
 
