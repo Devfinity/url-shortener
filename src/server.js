@@ -57,7 +57,9 @@ app.post('/shorten', (req, res) => {
                 maxAttempt++;
             }
             else {
-                return; //we will work on it
+                return res.status(500).json({
+                    message: 'Something went wrong'
+                });
             }
         }
     }
@@ -92,30 +94,51 @@ app.get('/about/:name', (req, res) => {
 });
 
 app.get('/stats/:code', (req, res) => {
-    const stats = db.prepare('SELECT code, original_url, clicks FROM urls WHERE code = ?').get(req.params.code); //retrives values
-    //it is working like a struct if we compare it to c++
+    try {
+        const stats = db.prepare('SELECT code, original_url, clicks FROM urls WHERE code = ?').get(req.params.code); //retrives values
+        //it is working like a struct if we compare it to c++
 
-    if (stats === undefined) {
-        return res.status(404).json({
-            message: 'Code not found, please enter a valid code!'
-        });
+        if (stats === undefined) {
+            return res.status(404).json({
+                message: 'Code not found, please enter a valid code!'
+            });
+        }
+        else {
+            res.json(stats);
+        }
     }
-    else {
-        res.json(stats);
+    catch (error) {
+        return res.status(500).json({
+            message: 'Something went wrong while accessing the database'
+        });
     }
 });
 
 app.get('/:code', (req, res) => {
-    const thisisworking = db.prepare('SELECT original_url FROM urls WHERE code = ?').get(req.params.code); //retrives the url from the database
+    try {
+        const thisisworking = db.prepare('SELECT original_url FROM urls WHERE code = ?').get(req.params.code);
+        //retrives the url from the database
 
-    if (thisisworking) {
-        //counts the number of times someone has clicked the shortened link and saves to database
-        //doesn't count unique!!
-        db.prepare('UPDATE urls SET clicks = clicks + 1 WHERE code = ?').run(req.params.code);
-        res.redirect(thisisworking.original_url);
+        if (thisisworking) {
+            try {
+                //counts the number of times someone has clicked the shortened link and saves to database
+                //doesn't count unique!!
+                db.prepare('UPDATE urls SET clicks = clicks + 1 WHERE code = ?').run(req.params.code);
+            }
+            catch (error) {
+                console.error(error);
+            }
+
+            res.redirect(thisisworking.original_url);
+        }
+        else {
+            res.status(404).send('Short link not found');
+        }
     }
-    else {
-        res.status(404).send('Short link not found');
+    catch (error) {
+        return res.status(500).json({
+            message: 'Something  went wrong while accessing the database!'
+        });
     }
 });
 
