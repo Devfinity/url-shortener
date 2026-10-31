@@ -8,11 +8,15 @@ const errorMessage = document.getElementById('errorMessage')
 const params = new URLSearchParams(window.location.search);
 const codeCheck = params.get('code');
 
+errorMessage.textContent = '';
+statsOfLinks.style.display = "none"
+
 if (!codeCheck) {
     errorMessage.textContent = 'Please enter a valid code!'
 }
 else {
-    fetch(`/stats/${codeCheck}`)
+    fetch(`/stats/${encodeURIComponent(codeCheck)}`)
+
         .then(response => {
             if (!response.ok) {
                 if (response.status === 404) {
@@ -39,7 +43,6 @@ else {
         })
 
         .catch(error => {
-            statsOfLinks.style.display = "none"
             errorMessage.textContent = error.message;
         });
 }

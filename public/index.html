@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <div id="titleMessage">
+    <div id="shortUrl">
         <h1> Url Shortener</h1>
 
         <p> turn long links into short one!</p>
@@ -27,6 +27,18 @@
     </div>
 
     <div id="statusMessage"></div>
+
+    <form id="statsForm">
+        <h1 id="statistics">View link statistics</h1>
+
+        <p> Enter the code/shortened Url</p>
+
+        <input id="statsRequest" type="text" placeholder="abc123 or http://localhost:3000/abc123">
+        <br> <br>
+        <button id="statsSearch" type="submit"> View statistics </button>
+
+        <div id="viewStatsError"></div>
+    </form>
 </body>
 
 </html>

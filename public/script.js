@@ -3,14 +3,18 @@ const noDefault = document.getElementById('formUrl')
 const result = document.getElementById('takeTheShortenedUrl')
 const copyingUrl = document.getElementById('copyingTheUrl')
 const statusMessage = document.getElementById('statusMessage')
+const showStatistics = document.getElementById('statsForm')
+const statsRequest = document.getElementById('statsRequest')
+const viewStatsError = document.getElementById('viewStatsError')
 
 let shortenedUrl;
+let viewStats;
 
 noDefault.addEventListener("submit", async (e) => {
     e.preventDefault(); // stops the browser's default form submission
 
     shortenedUrl = undefined;
-    result.textContent = ''; //line 13 and 14 so when submit it clicked it remove the old link
+    result.textContent = ''; //line 13 and 14 so when submit is clicked it remove the old link
     copyingUrl.style.display = "none";
 
 
@@ -39,6 +43,9 @@ noDefault.addEventListener("submit", async (e) => {
         }
 
         shortenedUrl = data.shortUrl;
+
+        const parsedUrl = new URL(data.shortUrl);
+        const codeValue = parsedUrl.pathname.slice(1);
 
         const clickableLink = document.createElement('a'); //"a" cause it is a link
 
@@ -77,3 +84,44 @@ copyingUrl.addEventListener("click", async () => {
     statusMessage.append(message);
 });
 
+showStatistics.addEventListener("submit", (e) => {
+    e.preventDefault(); //stops browser from reloading when button is clicked
+    viewStatsError.textContent = '';
+
+    const regexp = /^[a-z0-9]{6}$/;
+    const enteredValue = statsRequest.value.trim();
+
+    if (statsRequest.value.trim() === '') {
+        viewStatsError.textContent = 'Please enter a code or shortened URL.';
+        return;
+    }
+
+    try {
+        const parsedUrl = new URL(enteredValue)
+        const validCode = parsedUrl.pathname.slice(1);
+        const pathParts = parsedUrl.pathname.split('/');
+
+        if ((parsedUrl.hostname == 'localhost' && parsedUrl.port == 3000) && validCode != ''
+            && pathParts.length == 2 && regexp.test(validCode)) {
+            viewStats = validCode;
+        }
+        else {
+            viewStatsError.textContent = 'Please enter a Code/shortened Url';
+            return;
+        }
+    }
+    catch (error) {
+        if (regexp.test(enteredValue)) {
+            viewStats = enteredValue;
+        }
+        else {
+            viewStatsError.textContent = 'Please enter a valid code/shortened Url';
+            return;
+        }
+    }
+
+    //window.location.origin gives http://localhost:3000
+    //and encodeURIComponent() makes the text safe to put inside the URL
+    const redirectLink = `${window.location.origin}/stats.html?code=${encodeURIComponent(viewStats)}`;
+    window.location.href = redirectLink;
+});
