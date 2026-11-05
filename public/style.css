@@ -1,51 +1,149 @@
 body {
     margin: 0;
-    width: 100vw;
-    height: auto;
-    display: flex;
-    overflow-y: auto;
     min-height: 100vh;
-    overflow-x: hidden;
-    align-items: center;
-    flex-direction: column;
+    width: 100%;
+
+    display: flex;
+    background-color: #3D3A4B;
     justify-content: center;
-    background-color: black;
+
+    overflow-x: hidden;
 }
 
-h1 {
-    color: white;
-    text-align: center;
+.container {
+    width: 100%;
+    max-width: 900px;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+
+    padding: 23px;
+    margin-inline: auto;
 }
 
+.card {
+    width: 100%;
+    max-width: 600px;
+    box-sizing: border-box;
+
+    padding: 22px;
+    border-radius: 16px;
+    border: 1px solid white;
+}
+
+h1,
+h2,
 p {
-    color: white;
+    color: #E3DFFF;
     text-align: center;
 }
 
+/* Output container */
 #takeTheShortenedUrl {
-    color: white;
     margin-top: 15px;
     overflow-wrap: anywhere;
+}
+
+/* Hyperlink */
+#takeTheShortenedUrl a {
+    color: #E3DFFF;
+    text-decoration: none;
+}
+
+/* Hyperlink hover */
+#takeTheShortenedUrl a:hover {
+    color: #D3C0CD;
+    text-decoration: underline;
+}
+
+/* Hyperlink after visiting */
+#takeTheShortenedUrl a:visited {
+    color: #E3DFFF;
 }
 
 #formUrl {
     margin-top: 20px;
     display: flex;
+    gap: 19px;
     flex-direction: column;
     align-items: center;
 }
 
+#submittingTheUrl,
+#statsSearch,
+#copyingTheUrl {
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+/* button effect  */
+
+#submittingTheUrl:hover,
+#statsSearch:hover,
+#copyingTheUrl:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+    box-shadow: 0 4px 8px black;
+}
+
+#submittingTheUrl:active,
+#statsSearch:active,
+#copyingTheUrl:active {
+    transform: translateY(0);
+    filter: brightness(0.95);
+}
+
+/* button colors */
+
+#submittingTheUrl {
+    background-color: #B19994;
+    color: 3D3A4B;
+}
+
 #copyingTheUrl {
     display: none;
+    background-color: #D3C0CD;
+    color: #3D3A4B;
+}
+
+#statsSearch {
+    background-color: #937666;
+    color: #E3DFFF;
 }
 
 #statsForm {
     margin-top: 20px;
     display: flex;
+    gap: 19px;
     flex-direction: column;
     align-items: center;
 }
 
 #viewStatsError {
     color: white;
+}
+
+#urlHere,
+#statsRequest {
+    width: 100%;
+    padding: 15px;
+    font-size: 17px;
+
+    background-color: #D3C0CD;
+    border-radius: 12px;
+    border: 1px solid #937666;
+    box-sizing: border-box;
+}
+
+#urlHere:focus-visible,
+#statsRequest:focus-visible {
+    outline: 2px solid black;
+    outline-offset: 3px;
 }
